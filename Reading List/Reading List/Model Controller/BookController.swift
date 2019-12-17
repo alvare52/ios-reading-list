@@ -12,7 +12,7 @@ class BookController {
     // CRUD - Create Read Update Delete
 
     // 2
-    var books: [Book] = []
+    var books: [Book] = [Book(title: "Jaws", reasonToRead: "its cool"), Book(title: "Jaws 2", reasonToRead: "yes")]
     
     init() {
         loadFromPersistentStore()
@@ -21,7 +21,7 @@ class BookController {
     // 6
     @discardableResult func createBook(title: String, reasonToRead: String, hasBeenRead: Bool) -> Book {
         // Initialize a book and return it
-        let book  = Book(title: title, reasonToRead: reasonToRead)
+        var book  = Book(title: title, reasonToRead: reasonToRead, hasBeenRead: hasBeenRead)
         
         books.append(book)
         saveToPersistentStore()
@@ -35,9 +35,14 @@ class BookController {
         saveToPersistentStore()
     }
     
-    // NOT DONE !
     func updateHasBeenRead(for book: Book) {
         // Updates Book's hasBeenRead property by switching hasBeenRead from false to true or vice versa
+        if book.hasBeenRead {
+            book.hasBeenRead = false
+        }
+        else {
+            book.hasBeenRead = true
+        }
         saveToPersistentStore()
     }
     
@@ -47,18 +52,12 @@ class BookController {
         saveToPersistentStore()
     }
     
-    // 7
-    // NOT DONE !
-    // returns array of read books using .filter
     var readBooks: [Book] {
-        return []
+        return books.filter {$0.hasBeenRead}
     }
     
-    // 8
-    // same as above except for unread books
-    // NOT DONE !
     var unreadBooks: [Book] {
-        return []
+        return books.filter {$0.hasBeenRead == false}
     }
     
     
@@ -70,7 +69,7 @@ class BookController {
         // Go to the documents directory of our app
         guard let documentsDir = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else {return nil}
         
-        let booksURL = documentsDir.appendingPathComponent("ReadingList.plist")
+        let booksURL = documentsDir.appendingPathComponent("readinglist.plist")
         
         return booksURL
     }

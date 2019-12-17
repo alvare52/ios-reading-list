@@ -14,7 +14,23 @@ class BookTableViewCell: UITableViewCell {
     @IBOutlet weak var readButtonLabel: UIButton!
     
     @IBAction func readButtonTapped(_ sender: UIButton) {
+        delegate?.toggleHasBeenRead(for: self)
+    }
+    
+    var delegate: BookTableViewDelegate?
+    
+    var book: Book? {
+        didSet {
+            updateViews()
+        }
+    }
+    
+    func updateViews() {
+        titleLabel.text = book?.title
+        //readButtonLabel.imageView?.image = UIImage(named: "checked") // toggle() ?
     }
     
 
 }
+
+
